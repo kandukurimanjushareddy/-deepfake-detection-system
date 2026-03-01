@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Deepfake Detector</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.15);
+            padding: 40px;
+            border-radius: 20px;
+            width: 420px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            color: white;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 14px;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .upload-box {
+            border: 2px dashed white;
+            padding: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .upload-box:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            background: white;
+            color: #764ba2;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #f0f0f0;
+        }
+
+        .result-box {
+            margin-top: 25px;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .real {
+            background: #00c851;
+        }
+
+        .fake {
+            background: #ff4444;
+        }
+
+        .confidence-bar {
+            margin-top: 10px;
+            height: 8px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.3);
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: white;
+        }
+
+        img {
+            margin-top: 15px;
+            max-width: 100%;
+            border-radius: 12px;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🤖 Deepfake Detector</h1>
+    <p>Upload an image to detect AI manipulation</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        <label class="upload-box">
+            📂 Click to Upload Image
+            <input type="file" name="file" required>
+        </label>
+
+        <button class="btn" type="submit">Analyze</button>
+    </form>
+
+    {% if prediction %}
+        {% if "FAKE" in prediction %}
+            <div class="result-box fake">
+                {{ prediction }}
+                <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: {{ confidence }}%;"></div>
+                </div>
+            </div>
+        {% else %}
+            <div class="result-box real">
+                {{ prediction }}
+                <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: {{ confidence }}%;"></div>
+                </div>
+            </div>
+        {% endif %}
+
+        <img src="{{ img_path }}">
+    {% endif %}
+
+    <footer>
+        Built with TensorFlow & Flask 🚀
+    </footer>
+</div>
+
+</body>
+</html>
